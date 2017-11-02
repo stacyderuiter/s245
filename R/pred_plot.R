@@ -22,6 +22,10 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
                                length.out=250))
   xi <- which(names(fixed_vals)==predictor)
   new_data[,c(2:(ncol(data)-1))] <- fixed_vals[,-xi]
+  if (ncol(new_data) > 1){
+  names(new_data)[2:ncol(fixed_vals)] <- names(fixed_vals)[-xi]
+  }
+  names(new_data)[1] <- predictor
   #make predictions
   pred <- predict(model, newdata=new_data, type='response', se.fit=TRUE)
   new_data$preds <- pred$fit
@@ -36,22 +40,24 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   if (is.null(ylab)){
     ylab = 'Predictions from Fitted Model'
   }
+  form <- as.formula(paste("preds ~ ", predictor))
+  form2 <- as.formula(paste("CIl + CIu ~ ", predictor))
   #make plot if categorical predictor
   if (conf_int){
-  gf_point(preds ~ x, data=new_data) %>%
+  gf_point(form, data=new_data) %>%
     gf_labs(x=xlab, y=ylab) %>%
-    gf_errorbar(CIl + CIu ~ x, data=new_data)
+    gf_errorbar(form2, data=new_data)
   }else{
-    gf_point(preds ~ x, data=new_data) %>%
+    gf_point(form, data=new_data) %>%
       gf_labs(x=xlab, y=ylab)
   }
   #make plot if quant predictor
   if (conf_int){
-  gf_line(preds ~ x, data=new_data) %>%
+  gf_line(form, data=new_data) %>%
     gf_labs(x=xlab, y = ylab) %>%
-    gf_ribbon(CIl + CIu ~ x, data=new_data)
+    gf_ribbon(form2, data=new_data)
   }else{
-    gf_line(preds ~ x, data=new_data) %>%
+    gf_line(form, data=new_data) %>%
       gf_labs(x=xlab, y = ylab)
   }
 
