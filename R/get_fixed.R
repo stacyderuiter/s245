@@ -13,19 +13,20 @@ get_fixed <- function(data){
     #if data is a fitted model object, extract data
     data <- data$model
   }
-  data_out <- NA*data[1,] #set up shape
-  ci <- apply(data,2,class) %in% c('character', 'factor')
+  data_out <- data[1,] #set up shape
+  data_out[,] <- NA
+  ci <- unlist(lapply(data,class)) %in% c('character', 'factor')
   qi <- which(ci==FALSE)
   ci <- which(ci==TRUE)
   # find most common level of categorical
-  for (v in 1:length(ci)){
+  for (v in ci){
     fv <- factor(data[,v])
     data_out[1,v] <- levels(fv)[which.max(table(fv))]
   }
   # find median of quant
-  for (v in 1:length(qi)){
+  for (v in qi){
     data_out[1,v] <- median(data[,v], na.rm=TRUE)
   }
-# find most common values of cat
+return(data_out)
 }
 
