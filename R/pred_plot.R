@@ -20,7 +20,7 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   new_data <- data.frame(x=seq(from=min(data[,predictor], na.rm=TRUE),
                                to = max(data[,predictor], na.rm=TRUE),
                                length.out=250))
-  xi <- which(names(fixed_vals==predictor))
+  xi <- which(names(fixed_vals)==predictor)
   new_data[,c(2:(ncol(data)-1))] <- fixed_vals[,-xi]
   #make predictions
   pred <- predict(model, newdata=new_data, type='response', se.fit=TRUE)
