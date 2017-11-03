@@ -15,7 +15,7 @@
 qdredge <- function(model, family='x.quasipoisson',
                     na.action=na.fail, chat = dfun(model),
                     rank='QAIC', ...){
-  model2 <- state::update(model, family=family, na.action=na.action)
+  model2 <- stats::update(model, family=family, na.action=na.action)
   (dt <- MuMIn::dredge(model2, rank=rank, chat=chat, ...))
 }
 
