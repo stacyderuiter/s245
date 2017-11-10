@@ -4,11 +4,12 @@
 \alias{pred_plot}
 \title{make prediction plots for lm and glm objects using ggformula.}
 \usage{
-pred_plot(model, predictor, xlab = NULL, ylab = NULL, conf_int = TRUE,
+pred_plot(model, predictor, xlab = NULL, ylab = NULL, conf_level = 0.95,
+  conf_int = TRUE, boot = FALSE, nboot = 1000, new_data_out = FALSE,
   ...)
 }
 \arguments{
-\item{model}{a fitted model object created by lm() or glm()}
+\item{model}{a fitted model object created by lm() or glm() or geeglm()}
 
 \item{predictor}{the covariate for which to make predictions. other predictors in the model will be held constant at their median value, or the most commonly observed value in the dataset.}
 
@@ -16,11 +17,17 @@ pred_plot(model, predictor, xlab = NULL, ylab = NULL, conf_int = TRUE,
 
 \item{ylab}{Y axis label for plot (defaults to "Predictions from Fitted Model")}
 
-\item{conf_int}{logical: should 95 percent confidence intervals be shown (as error bars or confidence band)?}
+\item{conf_level}{confidence level as a proportion, default is 0.95 for 95 percent confidence}
 
-\item{...}{Additional arguments to be passed to plotting function}
+\item{conf_int}{logical: should confidence intervals be shown (as error bars or confidence band)?}
+
+\item{boot}{logical: should CIs be derived via a parametric bootstrap? Defaults to FALSE except if the model is a GEE, then defaults to TRUE.}
+
+\item{nboot}{number of bootstrap iterations. Defaults to 1000. Ignored if boot is FALSE.}
 
 \item{new_data_out}{logical: should data set used for predictions be output? If TRUE, result is a list including the plot object and the data frame.}
+
+\item{...}{Additional arguments to be passed to plotting function}
 }
 \value{
 A ggplot2 plot created using ggformula gf_line or gf_point

@@ -10,7 +10,9 @@ Imports:
     dplyr,
     ggformula,
     mosaic,
-    stats
+    mvtnorm,
+    stats,
+    VGAM
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
