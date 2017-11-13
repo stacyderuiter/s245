@@ -25,9 +25,13 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   fixed_vals <- get_fixed(model)
   data <- model$model
   #make dataset for predictions
-  new_data <- data.frame(x=seq(from=min(data[,predictor], na.rm=TRUE),
+  if (class(data[,predictor]) %in% c('factor', 'character')){
+    new_data <- data.frame(x=levels(factor(data[,predictor])))
+  }else{
+    new_data <- data.frame(x=seq(from=min(data[,predictor], na.rm=TRUE),
                                to = max(data[,predictor], na.rm=TRUE),
                                length.out=250))
+  }
   xi <- which(names(fixed_vals)==predictor)
   new_data[,c(2:(ncol(data)-1))] <- fixed_vals[,-xi]
   if (ncol(new_data) > 1){
@@ -67,6 +71,7 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   form2 <- as.formula(paste("CIl + CIu ~ ", predictor))
 
   #make plot if categorical predictor
+  if (class(data[,predictor]) %in% c('factor', 'character')){
   if (conf_int){
   P <- ggformula::gf_point(form, data=new_data) %>%
     ggformula::gf_labs(x=xlab, y=ylab) %>%
@@ -75,7 +80,7 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   P <- ggformula::gf_point(form, data=new_data) %>%
     ggformula::gf_labs(x=xlab, y=ylab)
   }
-  #make plot if quant predictor
+  }else{#make plot if quant predictor
   if (conf_int){
   P <- ggformula::gf_line(form, data=new_data) %>%
     ggformula::gf_labs(x=xlab, y = ylab) %>%
@@ -83,6 +88,7 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   }else{
    P <- ggformula::gf_line(form, data=new_data) %>%
      ggformula::gf_labs(x=xlab, y = ylab)
+  }
   }
   P
   if (new_data_out){

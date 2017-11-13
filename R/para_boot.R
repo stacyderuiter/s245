@@ -13,11 +13,20 @@ para_boot <- function(model, new_data, predictor, nboot, conf_level=0.95){
 
 #get the "design(ish) matrix"
 coefs <- coef(model)
-xmats <- list()
 f <- as.character(formula(model))
 f <- paste("~", f[3], sep="")
+#adjust for other factor predictors (other than the one being plotted)
+# faci <- which(unlist(lapply(new_data, function(x) class(x) %in% c('factor', 'character'))))
+# faci <- faci[names(faci) != predictor]
+# xrows <- 0
+# for (v in c(1:length(faci))){
+  # add_new_data <- data.frame(xv = levels(new_data[,faci[v]]))
+  # names(add_new_data) <- names(new_data)[faci[v]]
+  # add_new_data[,2:ncol(new_data)] <- new_data[1,names(new_data)!=names(new_data)[faci[v]]]
+  # xrows <- xrows + nrow(add_new_data)
+# }
 xmat <- model.matrix(as.formula(f), new_data)
-
+# xmat <- xmat[1:(nrow(xmat)-xrows),]
 
 #parametric bootstrap to get CIs on the mean factor level effects
 #Assume (this is reasonable given our model) that the

@@ -23,6 +23,7 @@ get_fixed <- function(data){
   for (v in ci){
     fv <- factor(data[,v])
     data_out[1,v] <- levels(fv)[which.max(table(fv))]
+    data_out[,v] <- factor(data_out[,v], levels=levels(fv))
   }
   # find median of quant
   for (v in qi){
