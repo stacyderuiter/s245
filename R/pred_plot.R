@@ -23,21 +23,7 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
     boot=TRUE
   }
   fixed_vals <- get_fixed(model)
-  data <- model$model
-  #make dataset for predictions
-  if (class(data[,predictor]) %in% c('factor', 'character')){
-    new_data <- data.frame(x=levels(factor(data[,predictor])))
-  }else{
-    new_data <- data.frame(x=seq(from=min(data[,predictor], na.rm=TRUE),
-                               to = max(data[,predictor], na.rm=TRUE),
-                               length.out=250))
-  }
-  xi <- which(names(fixed_vals)==predictor)
-  new_data[,c(2:(ncol(data)-1))] <- fixed_vals[,-xi]
-  if (ncol(new_data) > 1){
-  names(new_data)[2:ncol(fixed_vals)] <- names(fixed_vals)[-xi]
-  }
-  names(new_data)[1] <- predictor
+  new_data <- get_new_data(data, predictor, fixed_vals)
   if (!boot){
     #make predictions
     if (conf_int){
