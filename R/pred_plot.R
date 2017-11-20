@@ -22,9 +22,8 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   if ('gee' %in% class(model)){
     boot=TRUE
   }
-  fixed_vals <- get_fixed(model)
   new_data <- get_new_data(data=model, predictor=predictor,
-                           fixed_vals=fixed_vals)
+                           fixed_vals=get_fixed(model))
   if (!boot){
     #make predictions
     if (conf_int){
