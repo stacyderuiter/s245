@@ -10,7 +10,7 @@
 
 get_new_data <- function(data, predictor, fixed_vals){
   if (all('data.frame' %in% class(data)) == FALSE){
-    if ('lme4' %in% class(data)){
+    if ("glmerMod" %in% class(data)){
       data <- data@frame
       data <- data[,2:ncol(data)] #don't include response
     }else{
