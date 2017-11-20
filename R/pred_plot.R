@@ -57,7 +57,7 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   form2 <- as.formula(paste("CIl + CIu ~ ", predictor))
 
   #make plot if categorical predictor
-  if (class(data[,predictor]) %in% c('factor', 'character')){
+  if (class(new_data[,predictor]) %in% c('factor', 'character')){
   if (conf_int){
   P <- ggformula::gf_point(form, data=new_data) %>%
     ggformula::gf_labs(x=xlab, y=ylab) %>%
