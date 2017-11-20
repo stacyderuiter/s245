@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_new_data.R
 \name{get_new_data}
 \alias{get_new_data}
-\title{mget new dataset for making predictions}
+\title{get new dataset for making predictions}
 \usage{
 get_new_data(data, predictor, fixed_vals)
 }
@@ -17,5 +17,5 @@ get_new_data(data, predictor, fixed_vals)
 A data frame for which all variables except predictor have fixed values
 }
 \description{
-mget new dataset for making predictions
+get new dataset for making predictions
 }
