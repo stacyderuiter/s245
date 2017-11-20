@@ -10,7 +10,7 @@
 
 get_fixed <- function(data){
   if (all('data.frame' %in% class(data)) == FALSE){
-    if ('lme4' %in% class(data)){
+    if ("glmerMod" %in% class(data)){
       data <- data@frame
       data <- data[,2:ncol(data)] #don't include response
     }else{
