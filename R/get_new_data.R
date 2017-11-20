@@ -1,6 +1,6 @@
 #' mget new dataset for making predictions
 #'
-#' @param model a fitted model object created by lm() or glm() or geeglm()
+#' @param data a fitted model object created by lm() or glm() or geeglm()
 #' @param predictor the covariate for which to make predictions. other predictors in the model will be held constant at their median value, or the most commonly observed value in the dataset.
 #' @param fixed_vals a one-row data frame containing values to use for predictors other than the predictor of interest, obtained by a call to get_fixed
 #'
@@ -9,6 +9,16 @@
 
 
 get_new_data <- function(data, predictor, fixed_vals){
+  if (all('data.frame' %in% class(data)) == FALSE){
+    if ('lme4' %in% class(data)){
+      data <- data@frame
+      data <- data[,2:ncol(data)] #don't include response
+    }else{
+      #if data is a fitted model object, extract data
+      data <- data$model
+      data <- data[,2:ncol(data)] #don't include response
+    }
+  }
 #make dataset for predictions
 if (class(data[,predictor]) %in% c('factor', 'character')){
   new_data <- data.frame(x=levels(factor(data[,predictor])))
@@ -18,7 +28,7 @@ if (class(data[,predictor]) %in% c('factor', 'character')){
                                length.out=250))
 }
 xi <- which(names(fixed_vals)==predictor)
-new_data[,c(2:(ncol(data)-1))] <- fixed_vals[,-xi]
+new_data[,c(2:(ncol(data)))] <- fixed_vals[,-xi]
 if (ncol(new_data) > 1){
   names(new_data)[2:ncol(fixed_vals)] <- names(fixed_vals)[-xi]
 }

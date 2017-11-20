@@ -7,11 +7,11 @@
 get_new_data(data, predictor, fixed_vals)
 }
 \arguments{
+\item{data}{a fitted model object created by lm() or glm() or geeglm()}
+
 \item{predictor}{the covariate for which to make predictions. other predictors in the model will be held constant at their median value, or the most commonly observed value in the dataset.}
 
 \item{fixed_vals}{a one-row data frame containing values to use for predictors other than the predictor of interest, obtained by a call to get_fixed}
-
-\item{model}{a fitted model object created by lm() or glm() or geeglm()}
 }
 \value{
 A data frame for which all variables except predictor have fixed values

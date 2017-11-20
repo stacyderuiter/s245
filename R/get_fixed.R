@@ -10,9 +10,14 @@
 
 get_fixed <- function(data){
   if (all('data.frame' %in% class(data)) == FALSE){
+    if ('lme4' %in% class(data)){
+      data <- data@frame
+      data <- data[,2:ncol(data)] #don't include response
+    }else{
     #if data is a fitted model object, extract data
     data <- data$model
     data <- data[,2:ncol(data)] #don't include response
+    }
   }
   data_out <- data[1,] #set up shape
   data_out[,] <- NA

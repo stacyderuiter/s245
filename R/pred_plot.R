@@ -23,7 +23,7 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
     boot=TRUE
   }
   fixed_vals <- get_fixed(model)
-  new_data <- get_new_data(data, predictor, fixed_vals)
+  new_data <- get_new_data(model, predictor, fixed_vals)
   if (!boot){
     #make predictions
     if (conf_int){
