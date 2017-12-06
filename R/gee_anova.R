@@ -1,4 +1,6 @@
-#' carry out sequential ANOVA for a GEE fitted with geeglm
+#' ANOVA for GEEs
+#'
+#' Carry out ANOVA and do backward model selection for GEEs fitted with geepack::geeglm()
 #'
 #' @param model1 a fitted model object created by geepack::geeglm()
 #'

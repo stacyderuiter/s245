@@ -2,7 +2,7 @@
 % Please edit documentation in R/gee_anova.R
 \name{gee_anova}
 \alias{gee_anova}
-\title{carry out sequential ANOVA for a GEE fitted with geeglm}
+\title{ANOVA for GEEs}
 \usage{
 gee_anova(model1)
 }
@@ -13,5 +13,5 @@ gee_anova(model1)
 a list containing the best fitted model (with terms with p-values above 0.05 removed via backward selection) and a table of p-values for all variables in model1
 }
 \description{
-carry out sequential ANOVA for a GEE fitted with geeglm
+Carry out ANOVA and do backward model selection for GEEs fitted with geepack::geeglm()
 }
