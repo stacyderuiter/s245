@@ -12,14 +12,18 @@ get_fixed <- function(data){
   if (all('data.frame' %in% class(data)) == FALSE){
     if ("glmerMod" %in% class(data)){
       data <- data@frame
-      data <- data[,2:ncol(data)] #don't include response
+      namez <- names(data)
+      data <- data.frame(data[,2:ncol(data)]) #don't include response
+      names(data) <- namez[2:leng]
     }else{
-    #if data is a fitted model object, extract data
-    data <- data$model
-    data <- data[,2:ncol(data)] #don't include response
+      #if data is a fitted model object, extract data
+      data <- data$model
+      namez <- names(data)
+      data <- data.frame(data[,2:ncol(data)]) #don't include response
+      names(data) <- namez[2:length(namez)]
     }
   }
-  data_out <- data[1,] #set up shape
+  data_out <- data.frame(data[1,]) #set up shape
   data_out[,] <- NA
   ci <- unlist(lapply(data,class)) %in% c('character', 'factor')
   qi <- which(ci==FALSE)
