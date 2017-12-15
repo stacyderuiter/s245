@@ -10,11 +10,11 @@
 
 get_new_data <- function(data, predictor, fixed_vals){
   if (all('data.frame' %in% class(data)) == FALSE){
-    if ("glmerMod" %in% class(data)){
+    if ("glmerMod" %in% class(data) | "lmerMod" %in% class(data)){
       data <- data@frame
       namez <- names(data)
       data <- data.frame(data[,2:ncol(data)]) #don't include response
-      names(data) <- namez[2:leng]
+      names(data) <- namez[2:length(namez)]
     }else{
       #if data is a fitted model object, extract data
       data <- data$model
