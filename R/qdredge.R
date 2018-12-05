@@ -13,23 +13,8 @@
 #'
 #'
 qdredge <- function(model, family='x.quasipoisson',
-                    na.action=na.fail, chat = dfun(model),
-                    rank='QAIC', ...){
+                    na.action=na.fail,
+                    rank='QAIC', chat = dfun(model), ...){
   model2 <- stats::update(model, family=family, na.action=na.action)
   (dt <- MuMIn::dredge(model2, rank=rank, chat=chat, ...))
-}
-
-# modify a glm() output object so that
-# it contains a quasipoisson fit but the
-# AIC (likelihood) from the equivalent regular Poisson model
-x.quasipoisson <- function(...) {
-  res <- stats::quasipoisson(...)
-  res$aic <- stats::poisson(...)$aic
-  res
-}
-
-# function to extract the overdispersion parameter
-# from a quasi model
-dfun <- function(object) {
-  with(object,sum((weights * residuals^2)[weights > 0])/df.residual)
 }

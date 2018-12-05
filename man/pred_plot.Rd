@@ -4,9 +4,9 @@
 \alias{pred_plot}
 \title{make prediction plots for lm and glm objects using ggformula.}
 \usage{
-pred_plot(model, predictor, xlab = NULL, ylab = NULL, conf_level = 0.95,
-  conf_int = TRUE, boot = FALSE, nboot = 1000, new_data_out = FALSE,
-  ...)
+pred_plot(model, predictor, xlab = NULL, ylab = NULL,
+  conf_level = 0.95, conf_int = TRUE, boot = FALSE, nboot = 1000,
+  new_data_out = FALSE, ...)
 }
 \arguments{
 \item{model}{a fitted model object created by lm() or glm() or geeglm()}

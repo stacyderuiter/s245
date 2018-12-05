@@ -5,7 +5,7 @@
 \title{dredge for quasi-poisson models}
 \usage{
 qdredge(model, family = "x.quasipoisson", na.action = na.fail,
-  chat = dfun(model), rank = "QAIC", ...)
+  rank = "QAIC", chat = dfun(model), ...)
 }
 \arguments{
 \item{model}{a fitted model object created by glm() with family=quasipoisson}
@@ -14,9 +14,9 @@ qdredge(model, family = "x.quasipoisson", na.action = na.fail,
 
 \item{na.action}{default is 'na.fail', for compatibility with dredge()}
 
-\item{chat}{c-hat parameter passed to the QAIC function from package MuMIn This is the variance inflation factor, here estimated using the dispersion parameter from the quasi-poisson model.}
-
 \item{rank}{Function used to rank models; default is 'QAIC'}
+
+\item{chat}{c-hat parameter passed to the QAIC function from package MuMIn This is the variance inflation factor, here estimated using the dispersion parameter from the quasi-poisson model.}
 
 \item{...}{Additional arguments to be passed to dredge()}
 }
