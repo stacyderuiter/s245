@@ -36,7 +36,7 @@ get_fixed <- function(data){
   }
   # find median of quant
   for (v in qi){
-    data_out[1,v] <- median(data[,v], na.rm=TRUE)
+    data_out[1,v] <- stats::median(data[,v], na.rm=TRUE)
   }
 return(data_out)
 }

@@ -1,7 +1,7 @@
 #' QAIC (easier) for quasi-poisson models
 #'
 #' @param model a fitted model object (or optionally more than one) with family=quasipoisson
-#' @param chat c-hat parameter passed to the QAIC function from package MuMIn This is the variance inflation factor, here estimated using the dispersion parameter from the quasi-poisson model.
+#' @param \dots additional arguments to pass to MuMIn::QAIC()
 #' @export
 #' @return The QAIC for the model(s). See help for dredge() in package MuMIn for details.
 #'
@@ -18,6 +18,7 @@ myQAIC <- function(model, ...){
     result <- mapply(MuMIn::QAIC,
                      object=dots.xq,
                      chat = chats)
+    # c-hat parameter passed to the QAIC function from package MuMIn This is the variance inflation factor, here estimated using the dispersion parameter from the quasi-poisson model.
     Call <- match.call()
     Call$k <- NULL
     names(result) <- as.character(Call[-1L])

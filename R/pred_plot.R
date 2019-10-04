@@ -27,17 +27,24 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   if (!boot){
     #make predictions
     if (conf_int){
-      pred <- predict(model, newdata=new_data, type='response', se.fit=TRUE)
+      pred <- stats::predict(model,
+                             newdata=new_data,
+                             type='response',
+                             se.fit=TRUE)
       new_data$preds <- pred$fit
-      zstar <- qnorm((1-conf_level)/2, lower.tail=FALSE)
+      zstar <- stats::qnorm((1-conf_level)/2, lower.tail=FALSE)
       new_data$CIl <- pred$fit - zstar*pred$se.fit
       new_data$CIu <- pred$fit + zstar*pred$se.fit
     }else{#no CIs
-      pred <- predict(model, newdata=new_data, type='response')
+      pred <- stats::predict(model,
+                             newdata=new_data,
+                             type='response')
       new_data$preds <- pred
       }
   }else{#bootstrap CIs
-    pred <- predict(model, newdata=new_data, type='response')
+    pred <- stats::predict(model,
+                           newdata=new_data,
+                           type='response')
     new_data$preds <- pred
     if (conf_int){
       boot_CI <- para_boot(model, new_data, predictor,
@@ -53,8 +60,8 @@ pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
   if (is.null(ylab)){
     ylab = 'Predictions from Fitted Model'
   }
-  form <- as.formula(paste("preds ~ ", predictor))
-  form2 <- as.formula(paste("CIl + CIu ~ ", predictor))
+  form <- stats::as.formula(paste("preds ~ ", predictor))
+  form2 <- stats::as.formula(paste("CIl + CIu ~ ", predictor))
 
   #make plot if categorical predictor
   if (class(new_data[,predictor]) %in% c('factor', 'character')){

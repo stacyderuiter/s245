@@ -12,8 +12,8 @@
 para_boot <- function(model, new_data, predictor, nboot, conf_level=0.95){
 
 #get the "design(ish) matrix"
-coefs <- coef(model)
-f <- as.character(formula(model))
+coefs <- stats::coef(model)
+f <- as.character(stats::formula(model))
 f <- paste("~", f[3], sep="")
 #adjust for other factor predictors (other than the one being plotted)
 # faci <- which(unlist(lapply(new_data, function(x) class(x) %in% c('factor', 'character'))))
@@ -25,7 +25,7 @@ f <- paste("~", f[3], sep="")
   # add_new_data[,2:ncol(new_data)] <- new_data[1,names(new_data)!=names(new_data)[faci[v]]]
   # xrows <- xrows + nrow(add_new_data)
 # }
-xmat <- model.matrix(as.formula(f), new_data)
+xmat <- stats::model.matrix(stats::as.formula(f), new_data)
 # xmat <- xmat[1:(nrow(xmat)-xrows),]
 
 #parametric bootstrap to get CIs on the mean factor level effects
@@ -71,7 +71,9 @@ if (model$family$link == 'inverse'){
 # then to turn that into a CI, find percentile based CIs for
 #each row (each row is one combo of factor levels).
 boot_CI <- data.frame(upper=apply(boot_pred, 1,
-                                  quantile, probs= 1 - ((1-conf_level)/2)))
-boot_CI$lower <- apply(boot_pred, 1, quantile, probs= (1-conf_level)/2 )
+                                  stats::quantile,
+                                  probs= 1 - ((1-conf_level)/2)))
+boot_CI$lower <- apply(boot_pred, 1, stats::quantile,
+                       probs= (1-conf_level)/2 )
 return(boot_CI)
 }

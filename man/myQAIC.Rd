@@ -9,7 +9,7 @@ myQAIC(model, ...)
 \arguments{
 \item{model}{a fitted model object (or optionally more than one) with family=quasipoisson}
 
-\item{chat}{c-hat parameter passed to the QAIC function from package MuMIn This is the variance inflation factor, here estimated using the dispersion parameter from the quasi-poisson model.}
+\item{\dots}{additional arguments to pass to MuMIn::QAIC()}
 }
 \value{
 The QAIC for the model(s). See help for dredge() in package MuMIn for details.

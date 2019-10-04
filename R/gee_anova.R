@@ -21,25 +21,26 @@ gee_anova <- function(model1){
   #make sure names are unique, for example even "x1", "x2", "x3" would be ok!
 
   #create a data frame called "model.seln" to hold the model selection results
-  model.seln <- data.frame(coefs=labels(terms.formula(model1$formula)), p.vals=1, include=T)
+  model.seln <- data.frame(coefs=labels(stats::terms.formula(model1$formula)), p.vals=1, include=T)
   #get a list of the names of all the coefficients in the full model model1
-  all.coefs <- labels(terms.formula(model1$formula))
+  all.coefs <- labels(stats::terms.formula(model1$formula))
   alfa <- 0.05 #desired significance level for hypothesis testing
   best.model <- model1 #start with the full model - we will reduce it via anova-based model selection
   #the following loop will run until all non-significant predictors have been removed from the model
   while (any(model.seln[model.seln$include,"p.vals"] > alfa)){
     #get a list of the predictors in the current best model
-    best.coefs <- labels(terms.formula(best.model$formula))
+    best.coefs <- labels(stats::terms.formula(best.model$formula))
     for (k in 1:length(best.coefs)){ #loop over all coefficients except intercept
       #for each predictor/coefficient, move it to the end of the model specification then run anova
       coef <- best.coefs[k]
       #create a string naming the predictor currently being tested, to feed to "update" function
       f<-paste(".~.-",coef, "+", coef,sep="")
       #create "test.model", which has the current predictor as the last-term-added
-      test.model <- update(best.model,as.formula(f) )
+      test.model <- stats::update(best.model,
+                                  stats::as.formula(f) )
       #save the p-value (for the current predictor only) in the data frame "model.seln"
       model.seln[model.seln$coefs==coef,"p.vals"] <-
-        anova(test.model)$P[labels(terms.formula(test.model$formula))==coef]
+        stats::anova(test.model)$P[labels(stats::terms.formula(test.model$formula))==coef]
     }
     #first check interaction terms significance
     ints <- grep(":", best.coefs) #indices of interaction terms in (current) best model coef list
@@ -55,12 +56,15 @@ gee_anova <- function(model1){
       #and remove it from "best.model"
       j2 <- which(best.coefs[ints] == model.seln[ints.full[j], "coefs"])
       f<-paste(".~.-",best.coefs[ints[j2]],sep="")
-      best.model <- update(best.model,as.formula(f))
+      best.model <- stats::update(best.model,stats::as.formula(f))
     }else{ #if all the interactions are significant, then can check the main effects
       #goal: find the least-significant one with p>alfa.
       #j is the indices of the main-effect p-values, ordered biggest to smallest
-      px <- sort(model.seln[model.seln$coefs %in% best.coefs,"p.vals"],decreasing=T, index.return=T)$ix
-      p.sort <- model.seln[which(model.seln$coefs %in% best.coefs)[px], c("coefs", "p.vals")]
+      px <- sort(model.seln[model.seln$coefs %in% best.coefs,"p.vals"],
+                 decreasing=T,
+                 index.return=T)$ix
+      p.sort <- model.seln[which(model.seln$coefs %in% best.coefs)[px],
+                           c("coefs", "p.vals")]
       #exclude all the ones that are part of significant interactions
       for (kk in 1:nrow(p.sort)) { #this loop will remove entries from j until the first one is no longer part of a significant interaction.
         sig.int <- grep(pattern=p.sort[kk,"coefs"], best.coefs[ints])
@@ -68,7 +72,7 @@ gee_anova <- function(model1){
           p.sort[kk,] <- NA
         }
       }
-      p.sort <- na.omit(p.sort)
+      p.sort <- stats::na.omit(p.sort)
       #now update the model by removing the main effect with the biggest p value (among non-significant ones)
       if (nrow(p.sort) == 0){
         break # if there are no mains that are not in significant interactions, we're done
@@ -76,7 +80,7 @@ gee_anova <- function(model1){
         if (model.seln[model.seln$coefs==p.sort[1,"coefs"],"p.vals"] > alfa){
           model.seln[model.seln$coefs==p.sort[1,"coefs"],"include"] <- F
           f<-paste(".~.-",p.sort[1,"coefs"],sep="")
-          best.model <- update(best.model,as.formula(f))
+          best.model <- stats::update(best.model,stats::as.formula(f))
         }else{break}
       }
     }
