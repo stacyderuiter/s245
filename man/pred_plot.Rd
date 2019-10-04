@@ -4,14 +4,16 @@
 \alias{pred_plot}
 \title{make prediction plots for lm and glm objects using ggformula.}
 \usage{
-pred_plot(model, predictor, xlab = NULL, ylab = NULL,
+pred_plot(model, predictor, data = NULL, xlab = NULL, ylab = NULL,
   conf_level = 0.95, conf_int = TRUE, boot = FALSE, nboot = 1000,
   new_data_out = FALSE, ...)
 }
 \arguments{
-\item{model}{a fitted model object created by lm() or glm() or geeglm() or glmmTM}
+\item{model}{a fitted model object created by lm() or glm() or geeglm() or glmmTMB() or model.avg()}
 
 \item{predictor}{the covariate for which to make predictions. other predictors in the model will be held constant at their median value, or the most commonly observed value in the dataset.}
+
+\item{data}{The dataset to which the model was fitted. Only required (and only used) if the model input is an "averaging" object from model.avg().}
 
 \item{xlab}{X axis label for plot (defaults to name of predictor variable)}
 

@@ -23,6 +23,7 @@ get_new_data <- function(data, predictor, fixed_vals){
     data <- data.frame(data[,2:ncol(data)]) #don't include response
     names(data) <- namez[2:length(namez)]
   }
+
 #make dataset for predictions
 if (class(data[,predictor]) %in% c('factor', 'character')){
   new_data <- data.frame(x=levels(factor(data[,predictor])))

@@ -1,7 +1,8 @@
 #' make prediction plots for lm and glm objects using ggformula.
 #'
-#' @param model a fitted model object created by lm() or glm() or geeglm() or glmmTM
+#' @param model a fitted model object created by lm() or glm() or geeglm() or glmmTMB() or model.avg()
 #' @param predictor the covariate for which to make predictions. other predictors in the model will be held constant at their median value, or the most commonly observed value in the dataset.
+#' @param data The dataset to which the model was fitted. Only required (and only used) if the model input is an "averaging" object from model.avg().
 #' @param xlab X axis label for plot (defaults to name of predictor variable)
 #' @param ylab Y axis label for plot (defaults to "Predictions from Fitted Model")
 #' @param conf_int logical: should confidence intervals be shown (as error bars or confidence band)?
@@ -15,15 +16,26 @@
 #' @return A ggplot2 plot created using ggformula gf_line or gf_point
 
 
-pred_plot <- function(model, predictor, xlab=NULL, ylab=NULL,
+pred_plot <- function(model, predictor, data = NULL,  xlab=NULL, ylab=NULL,
                       conf_level=0.95, conf_int=TRUE,
                       boot=FALSE, nboot=1000, new_data_out=FALSE,
                       ...){
   if ('gee' %in% class(model)){
     boot=TRUE
   }
-  new_data <- get_new_data(data=model, predictor=predictor,
+
+  if ("averaging" %in% class(model)){
+    if (is.null(data)){
+      stop('pred_plot: input "data" is required, if input model is from model.avg().')
+    }else{
+      new_data <- get_new_data(data = data, predictor=predictor,
+                   fixed_vals=get_fixed(data))
+    }
+  }else{
+    new_data <- get_new_data(data=model, predictor=predictor,
                            fixed_vals=get_fixed(model))
+  }
+
   if (!boot){
     #make predictions
     if (conf_int){
