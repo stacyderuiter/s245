@@ -21,11 +21,11 @@ get_fixed <- function(data){
     }
     namez <- names(data)
     # deal with offsets
-    data[,str_detect(names(data), fixed("offset(log("))] <-
-      exp(data[,str_detect(names(data), fixed("offset(log("))] )
+    data[,stringr::str_detect(names(data), fixed("offset(log("))] <-
+      exp(data[,stringr::str_detect(names(data), fixed("offset(log("))] )
     namez <- namez %>%
-      str_remove(fixed("offset(log(")) %>%
-      str_remove(fixed("))"))
+      stringr::str_remove(fixed("offset(log(")) %>%
+      stringr::str_remove(fixed("))"))
 #    data <- data.frame(data[,2:ncol(data)]) #don't include response
     names(data) <- namez
   }
