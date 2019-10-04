@@ -78,20 +78,20 @@ pred_plot <- function(model, predictor, data = NULL,  xlab=NULL, ylab=NULL,
   #make plot if categorical predictor
   if (class(new_data[,predictor]) %in% c('factor', 'character')){
   if (conf_int){
-  P <- ggformula::gf_point(form, data=new_data) %>%
+  P <- ggformula::gf_point(form, data=new_data, ...) %>%
     ggformula::gf_labs(x=xlab, y=ylab) %>%
-    ggformula::gf_errorbar(form2, data=new_data)
+    ggformula::gf_errorbar(form2, data=new_data, ...)
   }else{
-  P <- ggformula::gf_point(form, data=new_data) %>%
+  P <- ggformula::gf_point(form, data=new_data, ...) %>%
     ggformula::gf_labs(x=xlab, y=ylab)
   }
   }else{#make plot if quant predictor
   if (conf_int){
-  P <- ggformula::gf_line(form, data=new_data) %>%
+  P <- ggformula::gf_line(form, data=new_data, ...) %>%
     ggformula::gf_labs(x=xlab, y = ylab) %>%
     ggformula::gf_ribbon(form2, data=new_data)
   }else{
-   P <- ggformula::gf_line(form, data=new_data) %>%
+   P <- ggformula::gf_line(form, data=new_data, ...) %>%
      ggformula::gf_labs(x=xlab, y = ylab)
   }
   }
