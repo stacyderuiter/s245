@@ -9,7 +9,7 @@ pred_plot(model, predictor, xlab = NULL, ylab = NULL,
   new_data_out = FALSE, ...)
 }
 \arguments{
-\item{model}{a fitted model object created by lm() or glm() or geeglm()}
+\item{model}{a fitted model object created by lm() or glm() or geeglm() or glmmTM}
 
 \item{predictor}{the covariate for which to make predictions. other predictors in the model will be held constant at their median value, or the most commonly observed value in the dataset.}
 

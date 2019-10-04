@@ -1,6 +1,6 @@
 #' make prediction plots for lm and glm objects using ggformula.
 #'
-#' @param model a fitted model object created by lm() or glm() or geeglm()
+#' @param model a fitted model object created by lm() or glm() or geeglm() or glmmTM
 #' @param predictor the covariate for which to make predictions. other predictors in the model will be held constant at their median value, or the most commonly observed value in the dataset.
 #' @param xlab X axis label for plot (defaults to name of predictor variable)
 #' @param ylab Y axis label for plot (defaults to "Predictions from Fitted Model")

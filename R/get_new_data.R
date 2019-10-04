@@ -1,6 +1,6 @@
 #' get new dataset for making predictions
 #'
-#' @param data a fitted model object created by lm() or glm() or geeglm()
+#' @param data a fitted model object created by lm() or glm() or geeglm() or glmmTMB()
 #' @param predictor the covariate for which to make predictions. other predictors in the model will be held constant at their median value, or the most commonly observed value in the dataset.
 #' @param fixed_vals a one-row data frame containing values to use for predictors other than the predictor of interest, obtained by a call to get_fixed
 #'
@@ -10,18 +10,18 @@
 
 get_new_data <- function(data, predictor, fixed_vals){
   if (all('data.frame' %in% class(data)) == FALSE){
+    if ("glmmTMB" %in% class(data)){
+      data <- data$frame
+    }else{
     if ("glmerMod" %in% class(data) | "lmerMod" %in% class(data)){
       data <- data@frame
-      namez <- names(data)
-      data <- data.frame(data[,2:ncol(data)]) #don't include response
-      names(data) <- namez[2:length(namez)]
     }else{
-      #if data is a fitted model object, extract data
       data <- data$model
-      namez <- names(data)
-      data <- data.frame(data[,2:ncol(data)]) #don't include response
-      names(data) <- namez[2:length(namez)]
     }
+    }
+    namez <- names(data)
+    data <- data.frame(data[,2:ncol(data)]) #don't include response
+    names(data) <- namez[2:length(namez)]
   }
 #make dataset for predictions
 if (class(data[,predictor]) %in% c('factor', 'character')){
