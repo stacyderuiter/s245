@@ -20,8 +20,14 @@ get_new_data <- function(data, predictor, fixed_vals){
     }
     }
     namez <- names(data)
-    data <- data.frame(data[,2:ncol(data)]) #don't include response
-    names(data) <- namez[2:length(namez)]
+    # deal with offsets
+    data[,str_detect(names(data), fixed("offset(log("))] <-
+      exp(data[,str_detect(names(data), fixed("offset(log("))] )
+    namez <- namez %>%
+      str_remove(fixed("offset(log(")) %>%
+      str_remove(fixed("))"))
+    #    data <- data.frame(data[,2:ncol(data)]) #don't include response
+    names(data) <- namez
   }
 
 #make dataset for predictions

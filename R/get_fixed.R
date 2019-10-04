@@ -10,19 +10,28 @@
 
 get_fixed <- function(data){
   if (all('data.frame' %in% class(data)) == FALSE){
-    if ("glmerMod" %in% class(data) | "lmerMod" %in% class(data)){
-      data <- data@frame
-      namez <- names(data)
-      data <- data.frame(data[,2:ncol(data)]) #don't include response
-      names(data) <- namez[2:length(namez)]
+    if ("glmmTMB" %in% class(data)){
+      data <- data$frame
     }else{
-      #if data is a fitted model object, extract data
-      data <- data$model
-      namez <- names(data)
-      data <- data.frame(data[,2:ncol(data)]) #don't include response
-      names(data) <- namez[2:length(namez)]
+      if ("glmerMod" %in% class(data) | "lmerMod" %in% class(data)){
+        data <- data@frame
+      }else{
+        data <- data$model
+      }
     }
+    namez <- names(data)
+    # deal with offsets
+    data[,str_detect(names(data), fixed("offset(log("))] <-
+      exp(data[,str_detect(names(data), fixed("offset(log("))] )
+    namez <- namez %>%
+      str_remove(fixed("offset(log(")) %>%
+      str_remove(fixed("))"))
+#    data <- data.frame(data[,2:ncol(data)]) #don't include response
+    names(data) <- namez
   }
+
+
+
   data_out <- data.frame(data[1,]) #set up shape
   data_out[,] <- NA
   ci <- unlist(lapply(data,class)) %in% c('character', 'factor')
