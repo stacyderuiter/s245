@@ -21,8 +21,10 @@ get_new_data <- function(data, predictor, fixed_vals){
     }
     namez <- names(data)
     # deal with offsets
+    if (sum(stringr::str_detect(names(data), fixed("offset(log(")))){
     data[,stringr::str_detect(names(data), fixed("offset(log("))] <-
       exp(data[,stringr::str_detect(names(data), fixed("offset(log("))] )
+    }
     namez <- namez %>%
       stringr::str_remove(fixed("offset(log(")) %>%
       stringr::str_remove(fixed("))"))
