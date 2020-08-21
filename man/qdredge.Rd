@@ -4,8 +4,14 @@
 \alias{qdredge}
 \title{dredge for quasi-poisson models}
 \usage{
-qdredge(model, family = "x.quasipoisson", na.action = "na.fail",
-  rank = "QAIC", chat = dfun(model), ...)
+qdredge(
+  model,
+  family = "x.quasipoisson",
+  na.action = "na.fail",
+  rank = "QAIC",
+  chat = dfun(model),
+  ...
+)
 }
 \arguments{
 \item{model}{a fitted model object created by glm() with family=quasipoisson}

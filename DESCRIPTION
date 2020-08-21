@@ -1,7 +1,7 @@
 Package: s245
 Type: Package
 Title: Tools for Calvin College STAT 245
-Version: 0.1.0
+Version: 0.3.0
 Author: S DeRuiter and STAT 245 students
 Maintainer: Stacy DeRuiter <sld33@calvin.edu>
 Description: This package contains helper functions developed during STAT 245 course work at Calvin University.
@@ -12,12 +12,13 @@ Imports:
     mosaic,
     mvtnorm,
     stats,
-    VGAM, 
+    VGAM,
     magrittr,
-    MuMIn, 
+    MuMIn,
     glmmTMB,
-    stringr
+    stringr,
+    rlang
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
