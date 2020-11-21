@@ -13,12 +13,13 @@
 #' @param ... Additional arguments to be passed to plotting function
 #'
 #' @export
-#' @return A ggplot2 plot created using ggformula gf_line or gf_point
+#' @return A ggplot2 plot created using ggformul::gf_line() or gf_point()
 
 
-pred_plot <- function(model, predictor, data = NULL,  xlab=NULL, ylab=NULL,
-                      conf_level=0.95, conf_int=TRUE,
-                      boot=FALSE, nboot=1000, new_data_out=FALSE,
+pred_plot <- function(model, predictor, data = NULL,
+                      xlab = NULL, ylab = NULL,
+                      conf_level = 0.95, conf_int = TRUE,
+                      boot = FALSE, nboot = 1000, new_data_out = FALSE,
                       ...){
   if ('gee' %in% class(model)){
     boot=TRUE
@@ -41,12 +42,13 @@ pred_plot <- function(model, predictor, data = NULL,  xlab=NULL, ylab=NULL,
     if (conf_int){
       pred <- stats::predict(model,
                              newdata=new_data,
-                             type='response',
+                             type='link',
                              se.fit=TRUE)
-      new_data$preds <- pred$fit
+      ilink <- gratia::inv_link(model)
+      new_data$preds <- ilink(pred$fit)
       zstar <- stats::qnorm((1-conf_level)/2, lower.tail=FALSE)
-      new_data$CIl <- pred$fit - zstar*pred$se.fit
-      new_data$CIu <- pred$fit + zstar*pred$se.fit
+      new_data$CIl <- ilink(pred$fit - zstar*pred$se.fit)
+      new_data$CIu <- ilink(pred$fit + zstar*pred$se.fit)
     }else{#no CIs
       pred <- stats::predict(model,
                              newdata=new_data,
@@ -70,7 +72,7 @@ pred_plot <- function(model, predictor, data = NULL,  xlab=NULL, ylab=NULL,
     xlab = predictor
   }
   if (is.null(ylab)){
-    ylab = 'Predictions from Fitted Model'
+    ylab = 'Expected Response'
   }
   form <- stats::as.formula(paste("preds ~ ", predictor))
   form2 <- stats::as.formula(paste("CIl + CIu ~ ", predictor))

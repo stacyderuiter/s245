@@ -41,7 +41,10 @@ get_fixed <- function(data){
   ci <- which(ci==TRUE)
   # find most common level of categorical
   for (v in ci){
-    fv <- factor(data[,v])
+    if (class(data[,v]) == 'character'){
+      data[,v] <- factor(data[,v])
+    }
+    fv <- data[,v]
     data_out[1,v] <- levels(fv)[which.max(table(fv))]
     data_out[,v] <- factor(data_out[,v], levels=levels(fv))
   }

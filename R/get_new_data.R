@@ -34,11 +34,16 @@ get_new_data <- function(data, predictor, fixed_vals){
 
 #make dataset for predictions
 if (class(data[,predictor]) %in% c('factor', 'character')){
-  new_data <- data.frame(x=levels(factor(data[,predictor])))
-}else{
-  new_data <- data.frame(x=seq(from=min(data[,predictor], na.rm=TRUE),
+  if (class(data[,predictor]) == 'factor'){
+    new_data <- data.frame(x = levels(data[,predictor])) %>%
+      mutate(x = factor(x, levels = levels(data[,predictor])))
+  }else{
+    new_data <- data.frame(x = unique(data[,predictor]))
+  }
+  }else{
+  new_data <- data.frame(x=seq(from = min(data[,predictor], na.rm=TRUE),
                                to = max(data[,predictor], na.rm=TRUE),
-                               length.out=250))
+                               length.out = 250))
 }
   if (ncol(data) > 1){
 xi <- which(names(fixed_vals)==predictor)

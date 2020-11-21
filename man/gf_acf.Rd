@@ -4,13 +4,15 @@
 \alias{gf_acf}
 \title{plot ACF for model residuals (or any vector of observations) using ggformula.}
 \usage{
-gf_acf(formula)
+gf_acf(formula, partial = FALSE)
 }
 \arguments{
 \item{formula}{a formula of the form ~ x, where x is usually a fitted regression model object. Supported types include those created by lm(), or glm(), geeglm(), glmmTMB(), model.avg(), gam(), and others that have a resid() method. If there is not, x will be treated as a vector of observations for which to compute the ACF.}
+
+\item{partial}{logical. compute PACF instead of acf?}
 }
 \value{
-A ggplot2 plot. For additional customization, pipe (%>%) to, for example, gf_refine(), gf_labs(), gf_lims, gf_theme().
+A ggplot2 plot. For additional customization, pipe to, for example, gf_refine(), gf_labs(), gf_lims, gf_theme().
 }
 \description{
 plot ACF for model residuals (or any vector of observations) using ggformula.

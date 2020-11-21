@@ -42,7 +42,7 @@ pred_plot(
 \item{...}{Additional arguments to be passed to plotting function}
 }
 \value{
-A ggplot2 plot created using ggformula gf_line or gf_point
+A ggplot2 plot created using ggformul::gf_line() or gf_point()
 }
 \description{
 make prediction plots for lm and glm objects using ggformula.

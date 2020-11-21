@@ -1,13 +1,14 @@
 #' plot ACF for model residuals (or any vector of observations) using ggformula.
 #'
 #' @param formula a formula of the form ~ x, where x is usually a fitted regression model object. Supported types include those created by lm(), or glm(), geeglm(), glmmTMB(), model.avg(), gam(), and others that have a resid() method. If there is not, x will be treated as a vector of observations for which to compute the ACF.
+#' @param partial logical. compute PACF instead of acf?
 #'
 #' @export
 #' @importFrom magrittr %>%
-#' @return A ggplot2 plot. For additional customization, pipe (%>%) to, for example, gf_refine(), gf_labs(), gf_lims, gf_theme().
+#' @return A ggplot2 plot. For additional customization, pipe to, for example, gf_refine(), gf_labs(), gf_lims, gf_theme().
 
 
-gf_acf <- function(formula){
+gf_acf <- function(formula, partial = FALSE){
   if (length(all.vars(formula)) != 1){
     stop("gf_acf requires a one-sided formula like: ~my_model. (Don't forget the ~)\n")
   }
@@ -19,7 +20,8 @@ gf_acf <- function(formula){
     r <- rlang::f_rhs(formula)
   }
 
-  acf_out <- stats::acf(r, plot = FALSE)
+  acf_out <- stats::acf(r, plot = FALSE,
+                        type = ifelse(partial, 'partial', 'correlation'))
   acf_data <- data.frame(lag = as.numeric(acf_out$lag),
                          acf = as.numeric(acf_out$acf))
   cilim <- stats::qnorm((1 - 0.95)/2) / sqrt(length(r))
