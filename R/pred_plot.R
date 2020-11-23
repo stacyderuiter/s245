@@ -40,15 +40,41 @@ pred_plot <- function(model, predictor, data = NULL,
   if (!boot){
     #make predictions
     if (conf_int){
-      pred <- stats::predict(model,
-                             newdata=new_data,
-                             type='link',
-                             se.fit=TRUE)
-      ilink <- gratia::inv_link(model)
-      new_data$preds <- ilink(pred$fit)
-      zstar <- stats::qnorm((1-conf_level)/2, lower.tail=FALSE)
-      new_data$CIl <- ilink(pred$fit - zstar*pred$se.fit)
-      new_data$CIu <- ilink(pred$fit + zstar*pred$se.fit)
+      if (class(model)[1] == 'lm'){
+        pred <- stats::predict(model,
+                               newdata=new_data,
+                               se.fit=TRUE)
+        zstar <- stats::qnorm((1-conf_level)/2, lower.tail=FALSE)
+        new_data$preds <- pred$fit
+        new_data$CIl <- pred$fit - zstar*pred$se.fit
+        new_data$CIu <- pred$fit + zstar*pred$se.fit
+      }else{
+        if (class(model)[1] %in% c('glmmTMB', 'geeglm')){
+
+          ilink_name <- stats::family(model)$link
+          id_fun <- function(x) x
+          iprobit <- function(x) stats::pnorm(x)
+          icloglog <- function(x) {1 - exp(-exp(x))}
+          ilinks <- list(identity = id_fun,
+                         probit = iprobit,
+                         cloglog = icloglog,
+                         logit = mosaic::ilogit,
+                         log = exp)
+
+          ilink <- ilinks[[ilink_name]]
+        }else{
+          ilink <- gratia::inv_link(model)
+        }
+        pred <- stats::predict(model,
+                               newdata=new_data,
+                               type='link',
+                               se.fit=TRUE)
+        new_data$preds <- ilink(pred$fit)
+        zstar <- stats::qnorm((1-conf_level)/2, lower.tail=FALSE)
+        new_data$CIl <- ilink(pred$fit - zstar*pred$se.fit)
+        new_data$CIu <- ilink(pred$fit + zstar*pred$se.fit)
+      }
+
     }else{#no CIs
       pred <- stats::predict(model,
                              newdata=new_data,
