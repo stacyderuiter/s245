@@ -12,13 +12,23 @@ gf_acf <- function(formula, partial = FALSE){
   if (length(all.vars(formula)) != 1){
     stop("gf_acf requires a one-sided formula like: ~my_model. (Don't forget the ~)\n")
   }
-  r <- try(rlang::f_rhs(formula) %>%
-             eval() %>%
-             stats::resid(),
-           silent = TRUE)
-  if (class(r) == 'try-error'){
-    r <- rlang::f_rhs(formula)
+
+  r <- rlang::f_rhs(formula) %>% eval()
+
+  if ('lm' %in% class(r)){
+    r <- stats::resid(r)
+  }else{
+    r <- as.numeric(r)
   }
+
+#
+#   r <- try(rlang::f_rhs(formula) %>%
+#              eval() %>%
+#              stats::resid(),
+#            silent = TRUE)
+#   if (class(r) == 'try-error'){
+#     r <- rlang::f_rhs(formula)
+#   }
 
   acf_out <- stats::acf(r, plot = FALSE,
                         type = ifelse(partial, 'partial', 'correlation'))
