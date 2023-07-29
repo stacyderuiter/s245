@@ -4,7 +4,7 @@
 #' @param partial logical. compute PACF instead of acf?
 #'
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom magrittr |>
 #' @return A ggplot2 plot. For additional customization, pipe to, for example, gf_refine(), gf_labs(), gf_lims, gf_theme().
 
 
@@ -13,7 +13,7 @@ gf_acf <- function(formula, partial = FALSE){
     stop("gf_acf requires a one-sided formula like: ~my_model. (Don't forget the ~)\n")
   }
 
-  r <- rlang::f_rhs(formula) %>% eval()
+  r <- rlang::f_rhs(formula) |> eval()
 
   if ('lm' %in% class(r)){
     r <- stats::resid(r)
@@ -22,8 +22,8 @@ gf_acf <- function(formula, partial = FALSE){
   }
 
 #
-#   r <- try(rlang::f_rhs(formula) %>%
-#              eval() %>%
+#   r <- try(rlang::f_rhs(formula) |>
+#              eval() |>
 #              stats::resid(),
 #            silent = TRUE)
 #   if (class(r) == 'try-error'){
@@ -35,11 +35,11 @@ gf_acf <- function(formula, partial = FALSE){
   acf_data <- data.frame(lag = as.numeric(acf_out$lag),
                          acf = as.numeric(acf_out$acf))
   cilim <- stats::qnorm((1 - 0.95)/2) / sqrt(length(r))
-  ggformula::gf_segment(0 + acf ~ lag + lag, data = acf_data) %>%
+  ggformula::gf_segment(0 + acf ~ lag + lag, data = acf_data) |>
     ggformula::gf_hline(yintercept = ~cilim,
-                        linetype = 'dashed') %>%
+                        linetype = 'dashed') |>
     ggformula::gf_hline(yintercept = ~(-cilim),
-                        linetype = 'dashed') %>%
+                        linetype = 'dashed') |>
     ggformula::gf_labs(x = 'Lag', y = 'Residual ACF')
 }
 

@@ -25,8 +25,8 @@ get_new_data <- function(data, predictor, fixed_vals){
     data[,stringr::str_detect(names(data), stringr::fixed("offset(log("))] <-
       exp(data[,stringr::str_detect(names(data), stringr::fixed("offset(log("))] )
     }
-    namez <- namez %>%
-      stringr::str_remove(stringr::fixed("offset(log(")) %>%
+    namez <- namez |>
+      stringr::str_remove(stringr::fixed("offset(log(")) |>
       stringr::str_remove(stringr::fixed("))"))
     #    data <- data.frame(data[,2:ncol(data)]) #don't include response
     names(data) <- namez
@@ -35,7 +35,7 @@ get_new_data <- function(data, predictor, fixed_vals){
 #make dataset for predictions
 if (class(data[,predictor]) %in% c('factor', 'character')){
   if (class(data[,predictor]) == 'factor'){
-    new_data <- data.frame(x = levels(data[,predictor])) %>%
+    new_data <- data.frame(x = levels(data[,predictor])) |>
       mutate(x = factor(x, levels = levels(data[,predictor])))
   }else{
     new_data <- data.frame(x = unique(data[,predictor]))
