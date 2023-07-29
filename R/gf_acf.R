@@ -4,7 +4,6 @@
 #' @param partial logical. compute PACF instead of acf?
 #'
 #' @export
-#' @importFrom magrittr |>
 #' @return A ggplot2 plot. For additional customization, pipe to, for example, gf_refine(), gf_labs(), gf_lims, gf_theme().
 
 
@@ -13,9 +12,9 @@ gf_acf <- function(formula, partial = FALSE){
     stop("gf_acf requires a one-sided formula like: ~my_model. (Don't forget the ~)\n")
   }
 
-  r <- rlang::f_rhs(formula) |> eval()
+  r <- rlang::f_rhs(formula) |> eval.parent()
 
-  if ('lm' %in% class(r)){
+  if ('lm' %in% class(r) | 'glmmTMB' %in% class(r)){
     r <- stats::resid(r)
   }else{
     r <- as.numeric(r)
